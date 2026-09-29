@@ -31,9 +31,9 @@ import (
 {{- $constructorName := printf "%s%s" $new (.StructName | firstUpper) }}
 
 {{/* CREATE MOCKER HELPER */}}
-{{- $mockerVarName := firstLower .Name }}
-{{- $mockerNameSuffix := .Name }}
-{{- if eq (lower .Name) (lower $.PkgName) }}
+{{- $mockerVarName := firstLower .StructName }}
+{{- $mockerNameSuffix := .StructName }}
+{{- if eq (lower .StructName) (lower $.PkgName) }}
 {{- $mockerNameSuffix = "" }}
 {{- end }}
 {{- $mockerTypeName := printf "%sMocker" $mockerNameSuffix }}
@@ -45,8 +45,8 @@ type {{ $mockerTypeName }}{{ $mock.TypeConstraint }} func(tb testing.TB) *{{ .St
 
 {{- if not $mock.TypeConstraint }}
 
-// Nop{{ .Name }} is a {{ .StructName }} mock with no expectation.
-var Nop{{ .Name }} = {{ $mockerFuncName }}()
+// Nop{{ .StructName }} is a {{ .StructName }} mock with no expectation.
+var Nop{{ .StructName }} = {{ $mockerFuncName }}()
 {{- end }}
 
 // {{ $mockerFuncName }} creates a new {{ .StructName }} mock with cleanup to ensure all the expectations are met.
