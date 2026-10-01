@@ -16,6 +16,7 @@ import (
 {{- range .Imports}}
 	{{ .ImportStatement }}
 {{- end}}
+    "slices"
     "testing"
 
     mock "github.com/stretchr/testify/mock"
@@ -38,6 +39,13 @@ import (
 {{- end }}
 {{- $mockerTypeName := printf "%sMocker" $mockerNameSuffix }}
 {{- $mockerFuncName := printf "Mock%s" $mockerNameSuffix }}
+{{- $defaultMocksVarName := printf "default%sMocks" (.StructName | firstUpper) }}
+
+{{- if not $mock.TypeConstraint }}
+
+// Nop{{ .StructName }} is a {{ .StructName }} mock with no expectation.
+var Nop{{ .StructName }} = {{ $mockerFuncName }}()
+{{- end }}
 
 // {{ $mockerTypeName }}{{ $mock.TypeConstraint }} is a func that creates a {{ .StructName }} mock. It is used to compose
 // mock expectations from other packages without exposing *testing.T.
@@ -45,8 +53,17 @@ type {{ $mockerTypeName }}{{ $mock.TypeConstraint }} func(tb testing.TB) *{{ .St
 
 {{- if not $mock.TypeConstraint }}
 
-// Nop{{ .StructName }} is a {{ .StructName }} mock with no expectation.
-var Nop{{ .StructName }} = {{ $mockerFuncName }}()
+var {{ $defaultMocksVarName }} []func({{ $mockerVarName }} *{{ .StructName }}{{ $mock.TypeInstantiation }})
+
+// Set{{ .StructName | firstUpper }}DefaultMocks sets the default mocks for {{ .StructName }}.
+func Set{{ .StructName | firstUpper }}DefaultMocks(mocks ...func({{ $mockerVarName }} *{{ .StructName }}{{ $mock.TypeInstantiation }})) {
+	{{ $defaultMocksVarName }} = mocks
+}
+
+// Append{{ .StructName | firstUpper }}DefaultMock appends a new mock to the default mocks for {{ .StructName }}.
+func Append{{ .StructName | firstUpper }}DefaultMock(mock func({{ $mockerVarName }} *{{ .StructName }}{{ $mock.TypeInstantiation }})) {
+	{{ $defaultMocksVarName }} = append({{ $defaultMocksVarName }}, mock)
+}
 {{- end }}
 
 // {{ $mockerFuncName }} creates a new {{ .StructName }} mock with cleanup to ensure all the expectations are met.
@@ -56,7 +73,11 @@ func {{ $mockerFuncName }}{{ $mock.TypeConstraint }}(mocks ...func({{ $mockerVar
 
 		{{ $mockerVarName }} := {{ $constructorName }}(tb)
 
+		{{- if not $mock.TypeConstraint }}
+		for _, configure := range slices.Concat({{ $defaultMocksVarName }}, mocks) {
+		{{- else }}
 		for _, configure := range mocks {
+		{{- end }}
 			configure({{ $mockerVarName }})
 		}
 
