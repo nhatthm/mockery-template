@@ -71,7 +71,7 @@ func {{ $mockerFuncName }}{{ $mock.TypeConstraint }}(mocks ...func({{ $mockerVar
 	return func(tb testing.TB) *{{ .StructName }}{{ $mock.TypeInstantiation }} {
 		tb.Helper()
 
-		{{ $mockerVarName }} := {{ $constructorName }}(tb)
+		{{ $mockerVarName }} := {{ $constructorName }}{{ $mock.TypeInstantiation }}(tb)
 
 		{{- if not $mock.TypeConstraint }}
 		for _, configure := range slices.Concat({{ $defaultMocksVarName }}, mocks) {
