@@ -16,7 +16,15 @@ import (
 {{- range .Imports}}
 	{{ .ImportStatement }}
 {{- end}}
+{{- $needsSlices := false }}
+{{- range .Interfaces }}
+{{- if not .TypeConstraint }}
+{{- $needsSlices = true }}
+{{- end }}
+{{- end }}
+{{- if $needsSlices }}
     "slices"
+{{- end }}
     "testing"
 
     mock "github.com/stretchr/testify/mock"
