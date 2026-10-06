@@ -1,0 +1,19 @@
+templates/testify-mocker.templ
+  s_c37b18cf428776::t_bc7d9656f336b4 74
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.15",
+  "base_commit_sha": "3d3c2bd77c790cb887e99b66c448766467b51359",
+  "prompts": {},
+  "sessions": {
+    "s_c37b18cf428776": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "9fbf34bd-607f-4189-896a-fe14dfb8cb4f",
+        "model": "claude-haiku-4-5-20251001"
+      },
+      "human_author": "Nhat <contact@nhat.me>"
+    }
+  }
+}
