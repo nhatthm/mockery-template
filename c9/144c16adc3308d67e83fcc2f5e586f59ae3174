@@ -1,0 +1,20 @@
+templates/testify-mocker.templ
+  s_c37b18cf428776::t_6a4ccd2a77576d 19-25
+  s_c37b18cf428776::t_518cac4100f06e 27
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.15",
+  "base_commit_sha": "c9144c16adc3308d67e83fcc2f5e586f59ae3174",
+  "prompts": {},
+  "sessions": {
+    "s_c37b18cf428776": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "9fbf34bd-607f-4189-896a-fe14dfb8cb4f",
+        "model": "unknown"
+      },
+      "human_author": "Nhat <contact@nhat.me>"
+    }
+  }
+}
